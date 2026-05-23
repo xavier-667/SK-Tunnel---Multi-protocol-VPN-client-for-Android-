@@ -1,0 +1,27 @@
+package com.surprisekhoza.sktunnel.vpn
+
+import android.net.VpnService
+import android.content.Intent
+import android.os.IBinder
+
+class MyVpnService : VpnService() {
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
+        val builder = Builder()
+
+        builder
+            .setSession("SK Tunnel")
+            .addAddress("10.0.0.2", 24)
+            .addDnsServer("8.8.8.8")
+            .addRoute("0.0.0.0", 0)
+
+        builder.establish()
+
+        return START_STICKY
+    }
+
+    override fun onBind(intent: Intent?): IBinder? {
+        return super.onBind(intent)
+    }
+}
