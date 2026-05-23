@@ -1,0 +1,82 @@
+package com.surprisekhoza.sktunnel
+
+import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.button.MaterialButton
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContentView(R.layout.activity_main)
+
+        val protocols = arrayOf(
+
+            "VMESS",
+            "VLESS",
+            "TROJAN",
+            "SHADOWSOCKS",
+            "SOCKS",
+            "HTTP",
+            "SSH",
+            "WIREGUARD",
+            "HYSTERIA",
+            "HYSTERIA2",
+            "TUIC",
+            "SHADOWTLS",
+            "ANYTLS",
+            "NAIVE",
+            "DIRECT",
+            "BLOCK",
+            "DNS",
+            "TOR",
+            "REALITY",
+            "BROOK",
+            "MIERU",
+
+            // Transport Types
+            "WS",
+            "HTTPUPGRADE",
+            "GRPC",
+            "QUIC",
+            "TCP",
+            "KCP",
+            "UDP",
+
+            // Extra Modes
+            "TUN",
+            "MIXED",
+            "REDIRECT",
+            "TPROXY"
+
+        )
+
+        val spinner = findViewById<Spinner>(R.id.protocolSpinner)
+
+        spinner.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            protocols
+        )
+
+        val connectBtn = findViewById<MaterialButton>(R.id.connectBtn)
+
+        connectBtn.setOnClickListener {
+
+            val selected = spinner.selectedItem.toString()
+
+            Toast.makeText(
+                this,
+                "Connecting using $selected",
+                Toast.LENGTH_SHORT
+            ).show()
+
+        }
+
+    }
+
+}
