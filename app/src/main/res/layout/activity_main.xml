@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#0D1117"
+    android:padding="20dp">
+
+    <!-- App Title -->
+
+    <TextView
+        android:id="@+id/appTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SK Tunnel"
+        android:textColor="#32C759"
+        android:textStyle="bold"
+        android:textSize="30sp" />
+
+    <!-- Subtitle -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Powered by Sing-Box"
+        android:textColor="#9BA1A6"
+        android:textSize="14sp"
+        android:layout_marginTop="5dp" />
+
+    <!-- Protocol Selector -->
+
+    <Spinner
+        android:id="@+id/protocolSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="25dp"
+        android:background="#161B22"
+        android:padding="10dp" />
+
+    <!-- Server Input -->
+
+    <EditText
+        android:id="@+id/serverInput"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="20dp"
+        android:hint="Server Address"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#9BA1A6"
+        android:background="#161B22"
+        android:padding="15dp" />
+
+    <!-- Port Input -->
+
+    <EditText
+        android:id="@+id/portInput"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="15dp"
+        android:hint="Port"
+        android:inputType="number"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#9BA1A6"
+        android:background="#161B22"
+        android:padding="15dp" />
+
+    <!-- Connect Button -->
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/connectBtn"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="30dp"
+        android:text="CONNECT"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        app:backgroundTint="#32C759" />
+
+    <!-- Logs -->
+
+    <TextView
+        android:id="@+id/logText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Status: Disconnected"
+        android:textColor="#9BA1A6"
+        android:textSize="14sp" />
+
+</LinearLayout>
