@@ -1,5 +1,8 @@
 package com.surprisekhoza.sktunnel
 
+import android.app.Activity
+import android.content.Intent
+import android.net.VpnService
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Spinner
@@ -11,6 +14,7 @@ import com.google.android.material.button.MaterialButton
 class MainActivity : AppCompatActivity() {
 
     private var connected = false
+    private val VPN_REQUEST_CODE = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,9 +57,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         val spinner = findViewById<Spinner>(R.id.protocolSpinner)
-
         val statusText = findViewById<TextView>(R.id.statusText)
-
         val connectBtn = findViewById<MaterialButton>(R.id.connectBtn)
 
         spinner.adapter = ArrayAdapter(
@@ -66,36 +68,59 @@ class MainActivity : AppCompatActivity() {
 
         connectBtn.setOnClickListener {
 
-            connected = !connected
+            val intent = VpnService.prepare(this)
 
-            val selected = spinner.selectedItem.toString()
-
-            if (connected) {
-
-                statusText.text = "Connected"
-                statusText.setTextColor(getColor(R.color.connected))
-
-                connectBtn.text = "DISCONNECT"
-
-                Toast.makeText(
-                    this,
-                    "Connected using $selected",
-                    Toast.LENGTH_SHORT
-                ).show()
-
+            if (intent != null) {
+                startActivityForResult(intent, VPN_REQUEST_CODE)
             } else {
-
-                statusText.text = "Disconnected"
-                statusText.setTextColor(getColor(R.color.disconnected))
-
-                connectBtn.text = "CONNECT"
-
-                Toast.makeText(
-                    this,
-                    "VPN Disconnected",
-                    Toast.LENGTH_SHORT
-                ).show()
+                startVpn()
             }
+        }
+    }
+
+    private fun startVpn() {
+
+        connected = !connected
+
+        val spinner = findViewById<Spinner>(R.id.protocolSpinner)
+        val statusText = findViewById<TextView>(R.id.statusText)
+        val connectBtn = findViewById<MaterialButton>(R.id.connectBtn)
+
+        val selected = spinner.selectedItem.toString()
+
+        if (connected) {
+
+            statusText.text = "Connected"
+            statusText.setTextColor(getColor(R.color.connected))
+
+            connectBtn.text = "DISCONNECT"
+
+            Toast.makeText(
+                this,
+                "VPN Started with $selected",
+                Toast.LENGTH_SHORT
+            ).show()
+
+        } else {
+
+            statusText.text = "Disconnected"
+            statusText.setTextColor(getColor(R.color.disconnected))
+
+            connectBtn.text = "CONNECT"
+
+            Toast.makeText(
+                this,
+                "VPN Stopped",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == VPN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            startVpn()
         }
     }
 }
