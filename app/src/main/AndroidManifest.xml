@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.surprisekhoza.sktunnel">
 
-    <!-- VPN + Network permissions -->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!-- INTERNET -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- Android 13+ notification permission -->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-
-    <!-- VPN Service Permission -->
-    <uses-permission android:name="android.permission.BIND_VPN_SERVICE"/>
+    <!-- VPN -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
+        android:name=".SKTunnelApp"
         android:allowBackup="true"
-        android:label="SK Tunnel"
         android:icon="@mipmap/ic_launcher"
+        android:label="SK Tunnel"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Start">
+        android:theme="@style/Theme.SKTunnel">
 
         <!-- MAIN ACTIVITY -->
         <activity
@@ -30,36 +25,25 @@
             android:exported="true">
 
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
         </activity>
 
-        <!-- VPN SERVICE (IMPORTANT) -->
+        <!-- VPN SERVICE -->
         <service
-            android:name=".MyVpnService"
+            android:name=".vpn.SingboxVpnService"
             android:permission="android.permission.BIND_VPN_SERVICE"
             android:exported="false"
             android:foregroundServiceType="vpn">
 
             <intent-filter>
-                <action android:name="android.net.VpnService"/>
+                <action android:name="android.net.VpnService" />
             </intent-filter>
 
         </service>
-
-        <!-- BOOT RECEIVER (optional future auto-start) -->
-        <receiver
-            android:name=".BootReceiver"
-            android:enabled="true"
-            android:exported="true">
-
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-
-        </receiver>
 
     </application>
 
