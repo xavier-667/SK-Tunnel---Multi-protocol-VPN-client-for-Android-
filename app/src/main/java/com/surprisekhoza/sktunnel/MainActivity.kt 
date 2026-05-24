@@ -3,11 +3,14 @@ package com.surprisekhoza.sktunnel
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
+
+    private var connected = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,7 +18,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val protocols = arrayOf(
-
             "VMESS",
             "VLESS",
             "TROJAN",
@@ -37,8 +39,6 @@ class MainActivity : AppCompatActivity() {
             "REALITY",
             "BROOK",
             "MIERU",
-
-            // Transport Types
             "WS",
             "HTTPUPGRADE",
             "GRPC",
@@ -46,16 +46,17 @@ class MainActivity : AppCompatActivity() {
             "TCP",
             "KCP",
             "UDP",
-
-            // Extra Modes
             "TUN",
             "MIXED",
             "REDIRECT",
             "TPROXY"
-
         )
 
         val spinner = findViewById<Spinner>(R.id.protocolSpinner)
+
+        val statusText = findViewById<TextView>(R.id.statusText)
+
+        val connectBtn = findViewById<MaterialButton>(R.id.connectBtn)
 
         spinner.adapter = ArrayAdapter(
             this,
@@ -63,20 +64,38 @@ class MainActivity : AppCompatActivity() {
             protocols
         )
 
-        val connectBtn = findViewById<MaterialButton>(R.id.connectBtn)
-
         connectBtn.setOnClickListener {
+
+            connected = !connected
 
             val selected = spinner.selectedItem.toString()
 
-            Toast.makeText(
-                this,
-                "Connecting using $selected",
-                Toast.LENGTH_SHORT
-            ).show()
+            if (connected) {
 
+                statusText.text = "Connected"
+                statusText.setTextColor(getColor(R.color.connected))
+
+                connectBtn.text = "DISCONNECT"
+
+                Toast.makeText(
+                    this,
+                    "Connected using $selected",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+            } else {
+
+                statusText.text = "Disconnected"
+                statusText.setTextColor(getColor(R.color.disconnected))
+
+                connectBtn.text = "CONNECT"
+
+                Toast.makeText(
+                    this,
+                    "VPN Disconnected",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
-
     }
-
 }
