@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.SKTunnel"
+    <style
+        name="Theme.SKTunnel"
         parent="Theme.Material3.Dark.NoActionBar">
 
-        <!-- Main Color -->
-        <item name="colorPrimary">@color/primary_green</item>
+        <!-- Main Colors -->
 
-        <!-- Background -->
-        <item name="android:windowBackground">@color/background</item>
+        <item name="colorPrimary">@color/green_primary</item>
 
-        <!-- Status Bar -->
-        <item name="android:statusBarColor">@color/background</item>
+        <item name="colorSecondary">@color/green_primary</item>
 
-        <!-- Navigation Bar -->
-        <item name="android:navigationBarColor">@color/background</item>
+        <item name="android:statusBarColor">@color/green_dark</item>
+
+        <item name="android:navigationBarColor">@color/green_dark</item>
+
+        <item name="android:windowBackground">@color/green_dark</item>
+
+        <!-- Buttons -->
+
+        <item name="materialButtonStyle">@style/Widget.Material3.Button</item>
 
     </style>
 
