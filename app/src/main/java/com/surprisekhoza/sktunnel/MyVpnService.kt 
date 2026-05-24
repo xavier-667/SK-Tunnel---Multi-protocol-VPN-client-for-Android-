@@ -1,0 +1,5 @@
+package com.surprisekhoza.sktunnel
+
+import android.net.VpnService
+
+class MyVpnService : VpnService()
