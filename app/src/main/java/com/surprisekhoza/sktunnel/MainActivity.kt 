@@ -8,41 +8,56 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
 
     private var connected = false
-
-    private lateinit var statusText: TextView
-    private lateinit var connectBtn: MaterialButton
-    private lateinit var spinner: Spinner
-
-    private val vpnPermission =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                startVpn()
-            } else {
-                Toast.makeText(this, "VPN permission denied", Toast.LENGTH_SHORT).show()
-            }
-        }
+    private val VPN_REQUEST_CODE = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val protocols = arrayOf(
-            "VMESS","VLESS","TROJAN","SHADOWSOCKS","SOCKS","HTTP","SSH",
-            "WIREGUARD","HYSTERIA","TUIC","SHADOWTLS","ANYTLS","NAIVE",
-            "DIRECT","BLOCK","DNS","TOR","REALITY","BROOK","MIERU",
-            "WS","GRPC","QUIC","TCP","UDP","TUN","MIXED","TPROXY"
+            "VMESS",
+            "VLESS",
+            "TROJAN",
+            "SHADOWSOCKS",
+            "SOCKS",
+            "HTTP",
+            "SSH",
+            "WIREGUARD",
+            "HYSTERIA",
+            "HYSTERIA2",
+            "TUIC",
+            "SHADOWTLS",
+            "ANYTLS",
+            "NAIVE",
+            "DIRECT",
+            "BLOCK",
+            "DNS",
+            "TOR",
+            "REALITY",
+            "BROOK",
+            "MIERU",
+            "WS",
+            "HTTPUPGRADE",
+            "GRPC",
+            "QUIC",
+            "TCP",
+            "KCP",
+            "UDP",
+            "TUN",
+            "MIXED",
+            "REDIRECT",
+            "TPROXY"
         )
 
-        spinner = findViewById(R.id.protocolSpinner)
-        statusText = findViewById(R.id.statusText)
-        connectBtn = findViewById(R.id.connectBtn)
+        val spinner = findViewById<Spinner>(R.id.protocolSpinner)
+        val statusText = findViewById<TextView>(R.id.statusText)
+        val connectBtn = findViewById<MaterialButton>(R.id.connectBtn)
 
         spinner.adapter = ArrayAdapter(
             this,
@@ -51,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         connectBtn.setOnClickListener {
+
             if (!connected) {
                 requestVpnPermission()
             } else {
@@ -61,8 +77,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun requestVpnPermission() {
         val intent = VpnService.prepare(this)
+
         if (intent != null) {
-            vpnPermission.launch(intent)
+            startActivityForResult(intent, VPN_REQUEST_CODE)
         } else {
             startVpn()
         }
@@ -71,12 +88,21 @@ class MainActivity : AppCompatActivity() {
     private fun startVpn() {
         connected = true
 
+        val statusText = findViewById<TextView>(R.id.statusText)
+        val connectBtn = findViewById<MaterialButton>(R.id.connectBtn)
+        val spinner = findViewById<Spinner>(R.id.protocolSpinner)
+
+        val selected = spinner.selectedItem.toString()
+
         statusText.text = "Connected"
         connectBtn.text = "DISCONNECT"
 
-        Toast.makeText(this, "VPN Started (ready for sing-box)", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this,
+            "VPN Started using $selected",
+            Toast.LENGTH_SHORT
+        ).show()
 
-        // NEXT STEP: start sing-box service here
         val intent = Intent(this, SktunnelVpnService::class.java)
         startService(intent)
     }
@@ -84,12 +110,31 @@ class MainActivity : AppCompatActivity() {
     private fun stopVpn() {
         connected = false
 
+        val statusText = findViewById<TextView>(R.id.statusText)
+        val connectBtn = findViewById<MaterialButton>(R.id.connectBtn)
+
         statusText.text = "Disconnected"
         connectBtn.text = "CONNECT"
 
-        Toast.makeText(this, "VPN Stopped", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this,
+            "VPN Stopped",
+            Toast.LENGTH_SHORT
+        ).show()
 
         val intent = Intent(this, SktunnelVpnService::class.java)
         stopService(intent)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == VPN_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                startVpn()
+            } else {
+                Toast.makeText(this, "VPN Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
